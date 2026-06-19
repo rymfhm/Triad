@@ -106,7 +106,24 @@ Three AI agents (Ingest, Analyst, Manager) collaborate to ingest security alerts
 - Band of Agents credentials (agent IDs + API keys) — optional, for cloud sync
 - Google Drive service account JSON key — optional, for cloud backup
 
-### Setup
+### Setup — Streamlit (easiest, for hackathon)
+
+```bash
+# 1. Clone the repo
+git clone <repo-url> && cd Triad
+
+# 2. Install deps
+pip install -r requirements.txt
+
+# 3. Set your Gemini API key
+# Option A: export GEMINI_API_KEY=your_key_here
+# Option B: create .env file with: GEMINI_API_KEY=your_key_here
+
+# 4. Launch
+streamlit run streamlit_app.py   # → http://localhost:8501
+```
+
+### Setup — Backend + Frontend (full stack)
 
 ```bash
 # 1. Clone the repo
@@ -140,16 +157,23 @@ cp .env.local.example .env.local  # already configured for :8000
 npm run dev       # → http://localhost:3000
 ```
 
-### Run the Pipeline
+### Run the Pipeline (Streamlit)
+
+1. Open `http://localhost:8501` in your browser
+2. Click **"Run Pipeline"**
+3. Watch the audit trail populate and reports appear
+4. Expand any incident report to see full Gemini analysis, matched MITRE patterns, and recommendations
+5. Use the **Threat Intelligence Search** bar to query the intel DB (ChromaDB semantic search)
+
+### Run the Pipeline (Web Dashboard)
 
 1. Open `http://localhost:3000` in your browser
 2. Click **"Run Pipeline"**
 3. Watch the audit trail populate in real-time (WebSocket auto-updates)
 4. Click on incident reports to see full Gemini analysis, matched MITRE patterns, and recommendations
-5. Use the **Threat Intelligence Search** bar to query the intel DB (ChromaDB semantic search)
-6. Refresh the page after pipeline completes to see updated stats
+5. Use the **Threat Intelligence Search** bar to query the intel DB
 
-### API Endpoints
+### API Endpoints (FastAPI server only — not needed for Streamlit)
 
 | Method | Path | Description |
 |--------|------|-------------|
@@ -174,6 +198,8 @@ npm run dev       # → http://localhost:3000
 
 ```
 Triad/
+├── streamlit_app.py         # 🚀 Streamlit UI — deploy this on Streamlit Cloud
+├── requirements.txt         # Dependencies for Streamlit Cloud deployment
 ├── backend/
 │   ├── main.py              # FastAPI app entry point, lifespan, CORS, service wiring
 │   ├── requirements.txt
@@ -196,26 +222,30 @@ Triad/
 │   │   ├── google_drive.py  # Drive export via service account (falls back to local JSON)
 │   │   └── message_store.py # In-memory BandMessage store with agent filtering
 │   └── tests/               # Test scaffolding
-├── frontend/
-│   ├── src/
-│   │   ├── app/
-│   │   │   ├── layout.tsx   # Root layout (dark theme, Geist fonts)
-│   │   │   └── page.tsx     # Server component shell → renders <Dashboard />
-│   │   ├── components/
-│   │   │   ├── dashboard.tsx # Full dashboard UI (stats, search, audit, reports)
-│   │   │   └── ui/           # shadcn primitives (badge, button, card, input, etc.)
-│   │   ├── hooks/
-│   │   │   └── useWebSocket.ts # WebSocket client with auto-reconnect + keepalive ping
-│   │   └── lib/
-│   │       ├── api.ts       # Typed API client (8 methods)
-│   │       └── utils.ts     # cn(), formatTimestamp(), severityColor()
-│   ├── .env.local
-│   └── package.json
+├── frontend/                 # Next.js dashboard (optional — deploy separately on Vercel)
 ├── docs/
 │   └── getting-started.md   # Quickstart guide
-├── exports/                 # Local report exports (JSON files)
+├── exports/                 # Local report exports (JSON files) [gitignored]
 └── README.md
 ```
+
+---
+
+## Deploy on Streamlit Cloud (🚀 recommended for hackathon)
+
+1. Push the repo to GitHub (done)
+2. Go to https://streamlit.io/cloud → **New app**
+3. Connect your GitHub repo (`rymfhm/Triad`)
+4. Set:
+   - **Branch**: `main`
+   - **Main file**: `streamlit_app.py`
+5. Add **Secrets** (Streamlit Cloud → Advanced Settings → Secrets):
+   ```toml
+   GEMINI_API_KEY = "your_gemini_key_here"
+   ```
+6. Deploy — your app is live at `https://your-app.streamlit.app`
+
+No separate backend server needed — Streamlit runs everything in one process.
 
 ---
 
