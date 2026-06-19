@@ -21,7 +21,19 @@ intel_store = ThreatIntelStore(persist_dir="./chroma_data")
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     logger.info(f"Threat Intel DB seeded with {intel_store.count()} patterns")
+    band_tasks = []
+    try:
+        from agents.band_agents import get_band_agents, run_band_agent
+        band_agents = get_band_agents(intel_store)
+        for name, agent in band_agents:
+            task = asyncio.create_task(run_band_agent(name, agent))
+            band_tasks.append(task)
+            logger.info(f"Scheduled Band agent: {name}")
+    except Exception as e:
+        logger.warning(f"Band agents not started: {e}")
     yield
+    for task in band_tasks:
+        task.cancel()
     logger.info("Shutting down.")
 
 
