@@ -198,7 +198,7 @@ npm run dev       # → http://localhost:3000
 
 ```
 Triad/
-├── streamlit_app.py         # 🚀 Streamlit UI — deploy this on Streamlit Cloud
+├── streamlit_app.py         #  Streamlit UI — deploy this on Streamlit Cloud
 ├── requirements.txt         # Dependencies for Streamlit Cloud deployment
 ├── backend/
 │   ├── main.py              # FastAPI app entry point, lifespan, CORS, service wiring
@@ -231,7 +231,7 @@ Triad/
 
 ---
 
-## Deploy on Streamlit Cloud (🚀 recommended for hackathon)
+## Deploy on Streamlit Cloud 
 
 1. Push the repo to GitHub (done)
 2. Go to https://streamlit.io/cloud → **New app**
