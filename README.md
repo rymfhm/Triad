@@ -1,4 +1,4 @@
-#Triad
+# Triad
 # Multi-Agent Threat Intelligence Desk
 
 Automated cyber incident triage squad built with **FastAPI × Band SDK × ChromaDB × Gemini × Next.js** — a submission for the **Band of Agents Hackathon 2026**.
