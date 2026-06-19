@@ -21,7 +21,7 @@ from db.chroma_wrapper import ThreatIntelStore
 from models.schemas import Severity
 
 st.set_page_config(
-    page_title="Threat Intelligence Desk",
+    page_title="TRiaD",
     page_icon="🛡️",
     layout="wide",
     initial_sidebar_state="collapsed",
@@ -176,8 +176,8 @@ def format_time(dt) -> str:
 
 col1, col2 = st.columns([3, 1])
 with col1:
-    st.markdown('<div class="header-title">🛡️ Threat Intelligence Desk</div>', unsafe_allow_html=True)
-    st.markdown('<div class="header-sub">Multi-Agent Cyber Incident Triage Squad</div>', unsafe_allow_html=True)
+    st.markdown('<div class="header-title">🛡️ TRiaD</div>', unsafe_allow_html=True)
+    st.markdown('<div class="header-sub">Threat intelligence & automated defense · Multi-Agent Cyber Incident Triage Squad</div>', unsafe_allow_html=True)
 with col2:
     st.markdown('<div style="text-align:right; padding-top:0.5rem">', unsafe_allow_html=True)
     is_running = orchestrator._running if hasattr(orchestrator, '_running') else False
@@ -348,6 +348,6 @@ with right_col:
 st.markdown("---")
 st.markdown(
     '<div style="text-align:center;font-size:0.6875rem;color:#52525b">'
-    "Triad · Multi-Agent Threat Intelligence Desk · Band of Agents Hackathon 2026</div>",
+    "TRiaD · Threat intelligence & automated defense · Band of Agents Hackathon 2026</div>",
     unsafe_allow_html=True,
 )

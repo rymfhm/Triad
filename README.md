@@ -1,9 +1,9 @@
 # Triad
-# Multi-Agent Threat Intelligence Desk
+# TRiaD — Threat intelligence & automated defense
 
-Automated cyber incident triage squad built with **FastAPI × Band SDK × ChromaDB × Gemini × Next.js** — a submission for the **Band of Agents Hackathon 2026**.
+Automated cyber incident triage squad built with **ChromaDB × Gemini × Streamlit** — a submission for the **Band of Agents Hackathon 2026**.
 
-Three AI agents (Ingest, Analyst, Manager) collaborate to ingest security alerts, analyze them against a threat intel database (via vector search + Gemini LLM), and generate compliance-ready incident reports — all surfaced through a real-time WebSocket-powered dashboard.
+Three AI agents (Ingest, Analyst, Manager) collaborate to ingest security alerts, analyze them against a threat intel database (via vector search + Gemini LLM), and generate compliance-ready incident reports — all surfaced through a dark-themed Streamlit dashboard.
 
 ---
 
