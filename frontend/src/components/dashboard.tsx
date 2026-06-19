@@ -9,6 +9,7 @@ import { Separator } from "@/components/ui/separator";
 import { Toaster, toast } from "sonner";
 import { api, type AuditEntry, type IncidentReport, type PipelineStatus, type ThreatIntel } from "@/lib/api";
 import { formatTimestamp, severityColor } from "@/lib/utils";
+import { useWebSocket } from "@/hooks/useWebSocket";
 
 export default function Dashboard() {
   const [status, setStatus] = useState<PipelineStatus | null>(null);
@@ -31,16 +32,16 @@ export default function Dashboard() {
       setAuditLog(a);
       setReports(r);
     } catch (e) {
-      toast.error("Failed to fetch data from backend");
+      // silent on background refresh
     } finally {
       setLoading(false);
     }
   }, []);
 
+  useWebSocket(fetchAll);
+
   useEffect(() => {
     fetchAll();
-    const interval = setInterval(fetchAll, 5000);
-    return () => clearInterval(interval);
   }, [fetchAll]);
 
   const handleRunPipeline = async () => {

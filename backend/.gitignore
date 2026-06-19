@@ -2,3 +2,5 @@
 chroma_data/
 __pycache__/
 *.pyc
+exports/
+test_output.json

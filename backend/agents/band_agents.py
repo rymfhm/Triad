@@ -60,7 +60,11 @@ When @analyst-agent posts analysis results, compile them into a final incident r
 Post the final report to the room and confirm it has been saved."""
 
 
-def get_band_agents(intel_store: ThreatIntelStore):
+def get_band_agents(
+    intel_store: ThreatIntelStore,
+    band_bridge=None,
+    message_store=None,
+):
     gemini_key = os.getenv("GEMINI_API_KEY")
     if not gemini_key:
         logger.warning("GEMINI_API_KEY not set - Band agents disabled")
@@ -87,14 +91,21 @@ def get_band_agents(intel_store: ThreatIntelStore):
         },
     ]
 
-    agents = []
     for cfg in configs:
         if not cfg["agent_id"] or not cfg["api_key"]:
             logger.warning(f"Missing credentials for {cfg['name']} agent")
             continue
 
+        if band_bridge:
+            band_bridge.add_agent(cfg["agent_id"], cfg["api_key"], cfg["name"])
+
+    agents = []
+    for cfg in configs:
+        if not cfg["agent_id"] or not cfg["api_key"]:
+            continue
+
         adapter = GeminiAdapter(
-            model="gemini-1.5-flash",
+            model="gemini-2.5-flash-lite",
             gemini_api_key=gemini_key,
             system_prompt=cfg["prompt"],
         )

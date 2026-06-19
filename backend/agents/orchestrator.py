@@ -36,13 +36,24 @@ class AgentOrchestrator:
         self._running = False
 
     async def _analyst_loop(self):
-        while True:
+        while self._running:
             alert = await self.alert_queue.get()
             analysis = await self.analyst._analyze(alert)
             report = await self.manager.generate_report(alert, analysis)
             self.reports.append(report)
             self._audit("orchestrator", f"Pipeline complete for alert {alert.id} -> report {report.report_id}")
             self.alert_queue.task_done()
+
+    async def post_to_band(self, band_bridge):
+        if not band_bridge:
+            return
+        for report in self.reports:
+            await band_bridge.send_message(
+                "manager",
+                f"Incident Report {report.report_id[:8]}: "
+                f"{report.alert.source} | risk={report.analysis.risk_level.value} | "
+                f"patterns={len(report.analysis.matched_patterns)}"
+            )
 
     def _audit(self, agent: str, details: str):
         self.audit_log.append(

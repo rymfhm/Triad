@@ -1,0 +1,5 @@
+# Service account key
+triad-*.json
+
+# Local exports
+exports/
